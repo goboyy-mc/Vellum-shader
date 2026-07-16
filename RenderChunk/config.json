@@ -1,35 +1,32 @@
-name: Compile Material Bin
-on: [push, workflow_dispatch]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: '17'
-
-      - name: Download MaterialBinTool
-        run: |
-          wget https://github.com -O MaterialBinTool.jar
-
-      - name: Download Shaderc for Linux
-        run: |
-          wget https://github.com -O shaderc
-          chmod +x shaderc
-
-      - name: Compile Shader
-        run: |
-          java -jar MaterialBinTool.jar -s ./shaderc -c ./RenderChunk
-
-      - name: Upload Material Bin Result
-        uses: actions/upload-artifact@v4
-        with:
-          name: Compiled-Materials
-          path: ./**/*.material.bin
-
+{
+  "macro_overwrite": {
+    "flags": {
+      "Instancing": {
+        "On": "INSTANCING",
+        "Off": []
+      },
+      "RenderAsBillboards": {
+        "On": "RENDER_AS_BILLBOARDS",
+        "Off": []
+      },
+      "Seasons": {
+        "On": "SEASONS",
+        "Off": []
+      }
+    },
+    "passes": {
+      "AlphaTest": "ALPHA_TEST",
+      "DepthOnly": "DEPTH_ONLY",
+      "DepthOnlyOpaque": "DEPTH_ONLY_OPAQUE",
+      "Opaque": "OPAQUE",
+      "Transparent": "TRANSPARENT"
+    }
+  },
+  "file_overwrite": {
+    "default": {
+      "fragment": "fragment.sc",
+      "vertex": "vertex.sc",
+      "varying": "varying.def.sc"
+    }
+  }
+}
