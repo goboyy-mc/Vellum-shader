@@ -4,6 +4,8 @@ on: [push, workflow_dispatch]
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -25,11 +27,12 @@ jobs:
 
       - name: Compile Shader
         run: |
-          java -jar MaterialBinTool.jar -s ./shaderc -c ./src
+          java -jar MaterialBinTool.jar -s ./shaderc -c ./RenderChunk
 
       - name: Upload Material Bin Result
         uses: actions/upload-artifact@v4
         with:
           name: Compiled-Materials
-          path: src/**/*.material.bin
+          path: RenderChunk/*.material.bin
+
           
